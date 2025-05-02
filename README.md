@@ -1,6 +1,6 @@
 # CV Road Tracker
 
-Real-time lane detection system using OpenCV. Processes webcam input with edge detection to identify and visualize road paths. Features GPU acceleration and multi-stage processing for reliable tracking.
+A real-time path identification and tracking application built with OpenCV and NumPy. The system uses edge detection, component filtering, and multi-stage processing to identify and visualize potential road paths from webcam input. Features GPU acceleration and multi-stage processing for reliable tracking.
 
 ## Features
 
@@ -34,10 +34,10 @@ Real-time lane detection system using OpenCV. Processes webcam input with edge d
 
 ```bash
 # Clone this repository
-git clone https://github.com/yourusername/cv-road-tracker.git
+git clone https://github.com/Harish-ioc/Path-Identification.git
 
 # Navigate to project directory
-cd cv-road-tracker
+cd Path-Identification
 
 # Install dependencies
 pip install -r requirements.txt
