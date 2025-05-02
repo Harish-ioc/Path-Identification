@@ -1,0 +1,2 @@
+# Path Identification
+ A real-time lane detection and tracking application built with OpenCV and NumPy. The system uses edge detection, component filtering, and multi-stage processing to identify and visualize potential road paths from webcam input. Features GPU acceleration support for improved performance when available. Perfect for robotics enthusiasts, autonomous vehicle prototyping, or computer vision students looking to understand road tracking fundamentals.
