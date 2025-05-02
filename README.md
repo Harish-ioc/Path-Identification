@@ -77,6 +77,3 @@ The system works through multiple processing stages:
 
 MIT
 
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
