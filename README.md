@@ -34,10 +34,10 @@ A real-time path identification and tracking application built with OpenCV and N
 
 ```bash
 # Clone this repository
-git clone https://github.com/yourusername/cv-road-tracker.git
+git clone https://github.com/Harish-ioc/Path-Identification.git
 
 # Navigate to project directory
-cd cv-road-tracker
+cd Path-Identification
 
 # Install dependencies
 pip install -r requirements.txt
