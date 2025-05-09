@@ -119,6 +119,19 @@ class VideoTracker:
             cv2.line(updated_image, coordinates[i], coordinates[i + 1], color=(0, 255, 0), thickness=2)
 
         return updated_image
+    
+    def get_dynamic_peak_point(self, points, top_percent=0.2):
+
+        sorted_points = sorted(points, key=lambda p: p[1])
+        
+        n_top = max(1, int(len(points) * top_percent))
+        top_points = sorted_points[:n_top]
+
+        avg_x = sum(p[0] for p in top_points) / len(top_points)
+        avg_y = sum(p[1] for p in top_points) / len(top_points)
+        
+        return (int(avg_x), int(avg_y))
+
 
     def process_video(self):
         
@@ -165,6 +178,7 @@ class VideoTracker:
                 second_phase_sorted.insert(0, (0, height))
                 second_phase_sorted.append((width, height))
 
+
                 for i in range(len(second_phase_sorted) - 1):
                     cv2.line(road_path, second_phase_sorted[i], second_phase_sorted[i + 1], color=(255, 0, 0), thickness=1)
 
@@ -179,6 +193,10 @@ class VideoTracker:
                 for i in range(len(third_phase_centroid) - 1):
                     cv2.line(road_path, third_phase_centroid[i], third_phase_centroid[i + 1], color=(0, 0, 255), thickness=1)
 
+                final_movement = self.get_dynamic_peak_point(second_phase_sorted)
+                print("Optimum direction : ", final_movement, "\n")
+
+                cv2.circle(traced_track, final_movement, 10, (100,100,100), -1)
                 traced_track2 = fit_and_visualize_lines(third_phase_centroid, width, height)
 
                 cv2.imshow('Track Frame', traced_track)
