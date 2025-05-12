@@ -2,11 +2,15 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 import time
+from datetime import datetime
+from visualize import visualize_trajectory
 
-def initialize_tracker():
+record_path = []
+
+def initialize_tracker(video_path):
     """Initialize video capture and tracking variables"""
     # Initialize video capture
-    cap = cv2.VideoCapture("test.mp4")  # Use 0 for default camera
+    cap = cv2.VideoCapture(video_path)  # Use 0 for default camera
     
     # Get initial frame dimensions
     ret, first_frame = cap.read()
@@ -66,6 +70,7 @@ def crop_frame(frame):
 def process_frame(cap, height, width, path, current_position, feature_params, lk_params, fig, ax, line, prev_gray, prev_corners, last_report_time):
     """Process a single frame of video"""
     ret, frame = cap.read()
+    
     # frame = crop_frame(frame)  # Uncomment if you want to use cropping
     
     if not ret:
@@ -125,6 +130,8 @@ def process_frame(cap, height, width, path, current_position, feature_params, lk
             fig.canvas.draw()
             fig.canvas.flush_events()
             
+            record_path.append((current_position[0],current_position[1], str(datetime.now().time())))
+
             # Report current position every second
             current_time = time.time()
             if current_time - last_report_time >= 1.0:  # Report every second
@@ -149,17 +156,18 @@ def process_frame(cap, height, width, path, current_position, feature_params, lk
     prev_gray = gray
     prev_corners = cv2.goodFeaturesToTrack(gray, mask=None, **feature_params)
     
-    return True, path, current_position, prev_gray, prev_corners, last_report_time
+    return True, path, current_position, prev_gray, prev_corners, last_report_time, record_path
 
 def run_tracker():
     """Main function to run the camera tracker"""
+    video_path = "test.mp4"
     # Initialize all variables
-    cap, height, width, path, current_position, feature_params, lk_params, fig, ax, line, prev_gray, prev_corners, last_report_time = initialize_tracker()
+    cap, height, width, path, current_position, feature_params, lk_params, fig, ax, line, prev_gray, prev_corners, last_report_time = initialize_tracker(video_path)
     
     try:
         while True:
             # Process frame and update variables
-            continue_processing, path, current_position, prev_gray, prev_corners, last_report_time = process_frame(
+            continue_processing, path, current_position, prev_gray, prev_corners, last_report_time, recorded_path = process_frame(
                 cap, height, width, path, current_position, 
                 feature_params, lk_params, fig, ax, line, prev_gray, prev_corners, last_report_time
             )
@@ -179,12 +187,19 @@ def run_tracker():
         cap.release()
         cv2.destroyAllWindows()
         plt.close()
-        return current_position  # Return the final position
+        return current_position, recorded_path  # Return the final position
 
 def get_current_position():
     """Function to get the current camera position"""
     return run_tracker()
 
+def main():
+    final_position, saved_path = run_tracker()
+    print(f"Tracker finished at position: {final_position}")
+    print(f"{saved_path}")
+    print("\nVisuals - \n")
+    # ani = visualize_trajectory(saved_path)
+
+
 if __name__ == "__main__":
-    position = run_tracker()
-    print(f"Tracker finished at position: {position}")
+    main()
